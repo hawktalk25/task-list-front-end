@@ -22,20 +22,21 @@ const App = () => {
     const newTasks = tasks.map((task) => {
       if (task.id === id){
         const updatedTask = {...task}; 
-        updatedTask.isComplete = !isComplete
+        updatedTask.isComplete = !isComplete;
       return updatedTask;
     } else{
       return {...task};
     }   
-    })
+    });
     setTasks(newTasks);
   };
   const deleteTask = (id) => {
-    const newTasks = tasks.filter((task) => {
-      task.id !== id;
-    })
+    const newTasks = tasks.filter((task) =>
+      task.id !== id);
+
     setTasks(newTasks);
-  }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
