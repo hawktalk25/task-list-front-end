@@ -19,9 +19,10 @@ import NewTaskForm from './components/NewTaskForm.js';
 
 function App() {
   const [tasks, setTasks] = useState([]);
-  const API = "https://task-list-api-c17.onrender.com/tasks";
-  useEffect(() =>{
-    axios
+  const API = 'https://task-list-api-c17.onrender.com/tasks';
+
+  const getAllTasks = () => {
+      axios
       .get(API)
       .then((result) =>{
         setTasks(result.data);
@@ -29,7 +30,11 @@ function App() {
       })
       .catch((err) =>{
         console.log(err);
-      })
+      });
+    };  
+
+  useEffect(() =>{
+    getAllTasks(); 
   }, []);
   
 
@@ -43,19 +48,11 @@ function App() {
     //   return {...task};
     // }   
     // });
-    const endPoint = isComplete ? "mark_incomplete" : "mark_complete"
+    const endPoint = isComplete ? 'mark_incomplete' : 'mark_complete';
     axios 
     .patch(`${API}/${id}/${endPoint}`)
     .then((result) => {
-      axios
-      .get(API)
-      .then((result) => {
-        setTasks(result.data)
-        console.log(result.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      getAllTasks();
     })
     .catch((err) => {
       console.log(err);
@@ -63,19 +60,27 @@ function App() {
   };
 
   const deleteTask = (id) => {
-    const newTasks = tasks.filter((task) =>
-      task.id !== id);
-
-    setTasks(newTasks);
-  };
+    axios
+      .delete(`${API}/${id}`)
+      .then((result) => {
+        // console.log(result.data); //"result" refers to the object being deleted
+        const newTasks = tasks.filter((task) =>
+        task.id !== id);
+      setTasks(newTasks);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    };
 
   const postTask = (newTaskData) => {
     axios.post(API, newTaskData)
       .then((result) => {
-        console.log(result.data)
+        console.log(result.data);
+        getAllTasks();
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
       });
   };
 
